@@ -1,0 +1,28 @@
+<head>
+	
+</head>
+<body>
+	<h1>01.html</h1>
+	<iframe id="iframe" src="02.html">
+		
+	</iframe>
+	<script>
+		var oFrame = document.getElementById('iframe').contentWindow;
+		document.onclick = function(){
+
+			oFrame.postMessage('click','/');
+		}
+		window.onmessage = function(event){
+			console.log(event.data)
+		}
+		/*
+			总结：postMessage可以实现跨域传消息，是限于文档内嵌的框架
+				注意:postMessage的第一个参数最早是只能传字符串，虽然后来改了，但是并不是所有浏览器支持 ，使用时先进行JSON.stringify(),获取时再使用JSON.parse();
+				第二个参数规定了把消息传到什么域下面的文档
+				通过onmessage方法，回调函数中的event参数来获得相关消息，event.data为传入的消息
+				event.source可以获得传入信息的对象，可以发送回执event.source.postMessage('get it','/');
+
+		*/
+	</script>
+
+</body>

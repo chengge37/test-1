@@ -1,0 +1,13 @@
+<head>
+	
+</head>
+<body>
+	<h1>02.html</h1>
+	<script type="text/javascript">
+		window.onmessage = function(event){
+			console.log(event.data)
+			console.log(event)
+			event.source.postMessage('get it','/');
+		}
+	</script>
+</body>

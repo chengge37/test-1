@@ -1,0 +1,108 @@
+<head>
+	<style>
+	  #demo1 {
+	    margin: 20px;
+	  }
+	  #demo1 .panel-list {
+	    overflow: hidden;
+	    list-style: none;
+	    margin: 0;
+	    padding: 0;
+	  }
+	  #demo1 .panel-item {
+	    float: left;
+	    margin-right: 30px;
+	    width: 100px;
+	    height: 100px;
+	    background: #ddd;
+	    border: 1px solid #ddd;
+	  }
+	  #demo1-src {
+	    display: inline-block;
+	    width: 50px;
+	    height: 50px;
+	    background: purple;
+	  }
+	  #demo1 .over {
+	    border: 1px dashed #000;
+	    -webkit-transform: scale(0.8, 0.8);
+	  }
+	  </style>
+</head>
+<body>
+	<div id="demo1">
+	  <ul class="panel-list">
+	    <li class="panel-item"></li>
+	    <li class="panel-item"></li>
+	    <li class="panel-item"></li>
+	    <li class="panel-item"></li>
+	    <li class="panel-item"></li>
+	  </ul>
+	  <h2>拖拽下面的方块到上面任意容器中</h2>
+
+	  <!-- 设置draggable使元素成为可拖拽元素 -->
+	  <span class="movable" id="demo1-src" draggable="true"></span>
+
+	  
+	  <script>
+
+    		var oPanelList = document.querySelector('.panel-list');
+    		var oTarget = document.getElementById('demo1-src');
+    		oTarget.addEventListener('dragstart',function(e){
+    			e.dataTransfer.setData('id','demo1-src');
+    			e.dataTransfer.effectAllowed = 'move';
+    		},false);
+    		
+      		
+      		oPanelList.addEventListener('dragenter', onDragEnter, false);
+      		// 取消元素dragover默认行为,使其可拖放
+	        oPanelList.addEventListener('dragover', onDragOver, false);
+      		oPanelList.addEventListener('drop', onDrop, false);
+      		oPanelList.addEventListener('dragleave', onDragLeave, false);
+
+	        
+	        function onDragEnter (e) {
+	        	 // e.preventDefault();
+	        	 e.dataTransfer.dropEffect = 'move';
+		        if(e.target.classList.contains('panel-item')){
+		        	e.target.classList.add('over');
+		        }
+		     }
+		     function onDragLeave (e) {
+		        if(e.target.classList.contains('panel-item')){
+		        	e.target.classList.remove('over');
+		        }
+		     }
+		    function onDragOver (e) {
+		        e.preventDefault();
+		     }
+		     function onDrop (e){
+      			 e.preventDefault();
+      			if(e.target.classList.contains('panel-item')){
+      				var id = e.dataTransfer.getData('id');
+      				var src = document.getElementById(id);
+      				e.target.classList.remove('over');
+      				e.target.appendChild(src);
+      			}
+      		}
+		     /*
+				总结：要给被拖拽的元素身上设置draggable="true";
+				注意：要想触发drop事件必须先阻止dragover、dragenter的默认事件，否则元素默认不允许放置，
+					为了兼容firefox，阻止它打开新的url，drop事件也要阻止默认事件
+				关于drop与dragleave事件，如果目标放进了目标中会触发drop。如果被拖出了目标会触发dragleave事件
+
+				dragstart、drag、dragend是发生在被拖拽的事件上的，当拖动停止无论是否放在目标点上都会触发dragend
+
+				dragennter、dragover、dragleave、drop是发生在目标上的
+				
+
+				dataTransfer对象主要是用于被拖动元素和目标之间的数据交换
+				通过e.dataTransfer来访问，主要方法是setData()和getData();
+
+				文件拖拽
+				操作系统拖放文件到浏览器需要取消drop默认行为
+				文件对象e.dataTransfer.files
+		     */
+
+	  </script>
+ </body>
